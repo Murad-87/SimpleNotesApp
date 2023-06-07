@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "356197207468",
+    "project_id": "notes-app-c46dc",
+    "storage_bucket": "notes-app-c46dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356197207468:android:032c87beb2e7e07a95fe09",
+        "android_client_info": {
+          "package_name": "com.muslim.simplenotesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356197207468-0ckkp9oue5gur9k3modnb766n5e7k3v2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRuPeLY8fhO8F2cA8CAzBEzUGdUaI6f_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356197207468-0ckkp9oue5gur9k3modnb766n5e7k3v2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
