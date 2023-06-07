@@ -9,6 +9,7 @@ import com.muslim.simplenotesapp.screens.AddScreen
 import com.muslim.simplenotesapp.screens.MainScreen
 import com.muslim.simplenotesapp.screens.NoteScreen
 import com.muslim.simplenotesapp.screens.StartScreen
+import com.muslim.simplenotesapp.utils.Constants
 
 @Composable
 fun NotesNavHost(viewModel: MainViewModel) {
@@ -25,8 +26,12 @@ fun NotesNavHost(viewModel: MainViewModel) {
         composable(NavRoute.Add.route) {
             AddScreen(navController = navController, viewModel = viewModel)
         }
-        composable(NavRoute.Note.route) {
-            NoteScreen(navController = navController, viewModel = viewModel)
+        composable(NavRoute.Note.route + "/{${Constants.Keys.ID}}") { backStackEntry ->
+            NoteScreen(
+                navController = navController,
+                viewModel = viewModel,
+                noteId = backStackEntry.arguments?.getString(Constants.Keys.ID)
+            )
         }
     }
 }
