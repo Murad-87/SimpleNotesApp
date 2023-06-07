@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -14,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,11 +34,9 @@ import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
-    val context = LocalContext.current
-    val viewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    val notes = viewModel.readAllNotes().observeAsState(listOf()).value
 
     Scaffold(
         floatingActionButton = {
@@ -52,32 +52,10 @@ fun MainScreen(navController: NavHostController) {
         }
     ) { paddingValue ->
         LazyColumn(modifier = Modifier.padding(paddingValue)) {
-//            items(notes) {note ->
-//                NoteItem(note = note, navController = navController)
-//            }
+            items(notes) { note ->
+                NoteItem(note = note, navController = navController)
+            }
         }
-//        Column(modifier = Modifier.padding(it)) {
-//            NoteItem(
-//                title = "Note 1",
-//                subtitle = "Subtitle for note 1",
-//                navController = navController
-//            )
-//            NoteItem(
-//                title = "Note 2",
-//                subtitle = "Subtitle for note 2",
-//                navController = navController
-//            )
-//            NoteItem(
-//                title = "Note 3",
-//                subtitle = "Subtitle for note 3",
-//                navController = navController
-//            )
-//            NoteItem(
-//                title = "Note 4",
-//                subtitle = "Subtitle for note 4",
-//                navController = navController
-//            )
-//        }
     }
 }
 
@@ -113,6 +91,9 @@ fun NoteItem(note: Note, navController: NavHostController) {
 @Composable
 fun MainScreenPreview() {
     SimpleNotesAppTheme {
-        MainScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val viewModel: MainViewModel =
+            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+        MainScreen(navController = rememberNavController(), viewModel = viewModel)
     }
 }

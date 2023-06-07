@@ -26,11 +26,7 @@ import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
 
 @Composable
-fun StartScreen(navController: NavHostController) {
-
-    val context = LocalContext.current
-    val viewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -76,6 +72,9 @@ fun StartScreen(navController: NavHostController) {
 @Composable
 fun StartScreenPreview() {
     SimpleNotesAppTheme {
-        StartScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val viewModel: MainViewModel =
+            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+        StartScreen(navController = rememberNavController(), viewModel = viewModel)
     }
 }
