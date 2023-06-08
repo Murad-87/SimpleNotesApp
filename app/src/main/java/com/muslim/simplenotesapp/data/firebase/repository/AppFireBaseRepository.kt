@@ -1,21 +1,38 @@
 package com.muslim.simplenotesapp.data.firebase.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.muslim.simplenotesapp.data.database_repository.DatabaseRepository
+import com.muslim.simplenotesapp.data.firebase.AllNotesLiveData
 import com.muslim.simplenotesapp.data.model.Note
+import com.muslim.simplenotesapp.utils.Constants
+import com.muslim.simplenotesapp.utils.FIREBASE_ID
 import com.muslim.simplenotesapp.utils.LOGIN
 import com.muslim.simplenotesapp.utils.PASSWORD
 
 class AppFireBaseRepository : DatabaseRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val database = Firebase.database.reference
+        .child(firebaseAuth.currentUser?.uid.toString())
 
-    override val readAll: LiveData<List<Note>>
-        get() = TODO("Not yet implemented")
+    override val readAll: LiveData<List<Note>> = AllNotesLiveData()
 
     override suspend fun create(note: Note, onSuccess: () -> Unit) {
-        TODO("Not yet implemented")
+        val noteId = database.push().key.toString()
+        val mapNotes = hashMapOf<String, Any>()
+
+        mapNotes[FIREBASE_ID] = noteId
+        mapNotes[Constants.Keys.TITLE] = note.title
+        mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
+
+        database.child(noteId)
+            .updateChildren(mapNotes)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { Log.d("checkData", "Failed to add new not") }
     }
 
     override suspend fun update(note: Note, onSuccess: () -> Unit) {
