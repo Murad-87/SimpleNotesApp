@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.muslim.simplenotesapp.data.database.room.AppRoomDatabase
 import com.muslim.simplenotesapp.data.database.room.repository.RoomRepository
+import com.muslim.simplenotesapp.data.firebase.repository.AppFireBaseRepository
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.utils.REPOSITORY
+import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +27,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val dao = AppRoomDatabase.getInstance(context).getRoomDao()
                 REPOSITORY = RoomRepository(dao)
                 onSuccess()
+            }
+            TYPE_FIREBASE -> {
+                REPOSITORY = AppFireBaseRepository()
+                REPOSITORY.connectToDatabase(
+                    {onSuccess()},
+                    {Log.d("checkData", "Error $it")}
+                )
             }
         }
     }
