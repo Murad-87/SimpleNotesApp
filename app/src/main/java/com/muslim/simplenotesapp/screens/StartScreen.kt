@@ -41,6 +41,7 @@ import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.Constants.Keys.FIREBASE_DATABASE
 import com.muslim.simplenotesapp.utils.Constants.Keys.ROOM_DATABASE
 import com.muslim.simplenotesapp.utils.Constants.Keys.WHAT_WILL_WE_USE
+import com.muslim.simplenotesapp.utils.DB_TYPE
 import com.muslim.simplenotesapp.utils.LOGIN
 import com.muslim.simplenotesapp.utils.PASSWORD
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
@@ -91,6 +92,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                             LOGIN = login
                             PASSWORD = password
                             viewModel.initDatabase(TYPE_FIREBASE) {
+                                DB_TYPE = TYPE_FIREBASE
                                 navController.navigate(NavRoute.Main.route)
                             }
                         },
@@ -116,6 +118,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                 Button(
                     onClick = {
                         viewModel.initDatabase(TYPE_ROOM) {
+                            DB_TYPE = TYPE_ROOM
                             navController.navigate(route = NavRoute.Main.route)
                         }
                     },
