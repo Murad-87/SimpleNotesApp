@@ -32,6 +32,10 @@ import com.muslim.simplenotesapp.MainViewModelFactory
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
+import com.muslim.simplenotesapp.utils.Constants
+import com.muslim.simplenotesapp.utils.DB_TYPE
+import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
+import com.muslim.simplenotesapp.utils.TYPE_ROOM
 
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -61,12 +65,19 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
+
+    val noteId = when(DB_TYPE) {
+        TYPE_FIREBASE -> note.firebaseId
+        TYPE_ROOM -> note.id
+        else -> Constants.Keys.EMPTY
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 24.dp)
             .clickable {
-                navController.navigate(NavRoute.Note.route + "/${note.id}")
+                navController.navigate(NavRoute.Note.route + "/${noteId}")
             },
         elevation = 6.dp,
     ) {

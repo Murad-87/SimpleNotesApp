@@ -8,7 +8,7 @@ import com.muslim.simplenotesapp.data.database.room.dao.NoteRoomDao
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.utils.Constants.Keys.NOTES_DATABASE
 
-@Database(entities = [Note::class], version = 1)
+@Database(entities = [Note::class], version = 2)
 abstract class AppRoomDatabase : RoomDatabase() {
 
     abstract fun getRoomDao(): NoteRoomDao
@@ -24,7 +24,9 @@ abstract class AppRoomDatabase : RoomDatabase() {
                     context,
                     AppRoomDatabase::class.java,
                     NOTES_DATABASE
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE as AppRoomDatabase
             } else INSTANCE as AppRoomDatabase
         }

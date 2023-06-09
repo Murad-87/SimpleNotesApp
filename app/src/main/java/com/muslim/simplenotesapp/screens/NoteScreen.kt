@@ -41,6 +41,9 @@ import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
+import com.muslim.simplenotesapp.utils.DB_TYPE
+import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
+import com.muslim.simplenotesapp.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -48,10 +51,15 @@ import kotlinx.coroutines.launch
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
 
     val notes = viewModel.readAllNotes().observeAsState().value
-    val note = notes?.firstOrNull { it.id == noteId?.toInt() } ?: Note(
-        title = Constants.Keys.NONE,
-        subtitle = Constants.Keys.NONE
-    )
+    val note = when(DB_TYPE) {
+        TYPE_ROOM -> {
+            notes?.firstOrNull{it.id == noteId?.toInt()} ?: Note()
+        }
+        TYPE_FIREBASE -> {
+            notes?.firstOrNull{it.firebaseId == noteId} ?: Note()
+        }
+        else -> Note()
+    }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     var title by remember { mutableStateOf(Constants.Keys.EMPTY) }
@@ -93,7 +101,8 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                                 note = Note(
                                     id = note.id,
                                     title = title,
-                                    subtitle = subtitle
+                                    subtitle = subtitle,
+                                    firebaseId = note.firebaseId
                                 )
                             ) {
                                 navController.navigate(NavRoute.Main.route)
