@@ -1,9 +1,9 @@
 package com.muslim.simplenotesapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.muslim.simplenotesapp.MainViewModel
 import com.muslim.simplenotesapp.screens.AddScreen
 import com.muslim.simplenotesapp.screens.MainScreen
@@ -12,9 +12,7 @@ import com.muslim.simplenotesapp.screens.StartScreen
 import com.muslim.simplenotesapp.utils.Constants
 
 @Composable
-fun NotesNavHost(viewModel: MainViewModel) {
-
-    val navController = rememberNavController()
+fun NotesNavHost(viewModel: MainViewModel, navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = NavRoute.Start.route) {
         composable(NavRoute.Start.route) {

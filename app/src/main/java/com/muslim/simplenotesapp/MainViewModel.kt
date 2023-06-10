@@ -10,6 +10,8 @@ import com.muslim.simplenotesapp.data.database.room.AppRoomDatabase
 import com.muslim.simplenotesapp.data.database.room.repository.RoomRepository
 import com.muslim.simplenotesapp.data.firebase.repository.AppFireBaseRepository
 import com.muslim.simplenotesapp.data.model.Note
+import com.muslim.simplenotesapp.utils.Constants
+import com.muslim.simplenotesapp.utils.DB_TYPE
 import com.muslim.simplenotesapp.utils.REPOSITORY
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
@@ -28,11 +30,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 REPOSITORY = RoomRepository(dao)
                 onSuccess()
             }
+
             TYPE_FIREBASE -> {
                 REPOSITORY = AppFireBaseRepository()
                 REPOSITORY.connectToDatabase(
-                    {onSuccess()},
-                    {Log.d("checkData", "Error $it")}
+                    { onSuccess() },
+                    { Log.d("checkData", "Error $it") }
                 )
             }
         }
@@ -67,6 +70,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     onSuccess()
                 }
             }
+        }
+    }
+
+    fun signOut(onSuccess: () -> Unit) {
+        when (DB_TYPE.value) {
+            TYPE_FIREBASE,
+            TYPE_ROOM -> {
+                REPOSITORY.singOut()
+                DB_TYPE.value = Constants.Keys.EMPTY
+                onSuccess()
+            }
+
+            else -> {Log.d("checkData", "signOut: ELSE: ${DB_TYPE.value}")}
         }
     }
 }
