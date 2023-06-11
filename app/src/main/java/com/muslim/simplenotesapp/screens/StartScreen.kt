@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
@@ -25,7 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +67,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
     val scope = rememberCoroutineScope()
     var login by remember { mutableStateOf(Constants.Keys.EMPTY) }
     var password by remember { mutableStateOf(Constants.Keys.EMPTY) }
+    val focusManager = LocalFocusManager.current
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -69,28 +78,49 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(all = 32.dp)
+                        .padding(start = 32.dp, end = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = Constants.Keys.LOG_IN,
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(top = 10.dp, bottom = 18.dp)
                     )
                     OutlinedTextField(
                         value = login,
                         onValueChange = { login = it },
                         label = { Text(text = LOGIN_TEXT) },
-                        isError = login.isEmpty()
+                        isError = login.isEmpty(),
+                        visualTransformation = VisualTransformation.None,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Email
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
                         label = { Text(text = PASSWORD_TEXT) },
-                        isError = password.isEmpty()
+                        isError = password.isEmpty(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        ),
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Button(
-                        modifier = Modifier.padding(top = 16.dp),
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .width(200.dp),
                         onClick = {
                             LOGIN = login
                             PASSWORD = password
@@ -105,7 +135,10 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         },
                         enabled = login.isNotEmpty() && password.isNotEmpty()
                     ) {
-                        Text(text = SING_IN)
+                        Text(
+                            text = SING_IN,
+                            fontSize = 18.sp
+                        )
                     }
                 }
             }
@@ -125,7 +158,10 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Text(text = WHAT_WILL_WE_USE)
+                Text(
+                    text = WHAT_WILL_WE_USE,
+                    fontSize = 18.sp
+                )
                 Button(
                     onClick = {
                         viewModel.initDatabase(TYPE_ROOM) {
@@ -134,10 +170,13 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         }
                     },
                     modifier = Modifier
-                        .width(260.dp)
-                        .padding(vertical = 6.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp, horizontal = 16.dp)
                 ) {
-                    Text(text = ROOM_DATABASE)
+                    Text(
+                        text = ROOM_DATABASE,
+                        fontSize = 20.sp
+                    )
                 }
 
                 Button(
@@ -147,10 +186,13 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         }
                     },
                     modifier = Modifier
-                        .width(260.dp)
-                        .padding(vertical = 6.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp, horizontal = 16.dp)
                 ) {
-                    Text(text = FIREBASE_DATABASE)
+                    Text(
+                        text = FIREBASE_DATABASE,
+                        fontSize = 20.sp
+                    )
                 }
             }
         }

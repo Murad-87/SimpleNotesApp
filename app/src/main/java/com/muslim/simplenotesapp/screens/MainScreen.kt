@@ -1,6 +1,8 @@
 package com.muslim.simplenotesapp.screens
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,7 +19,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +45,11 @@ import com.muslim.simplenotesapp.utils.DB_TYPE
 import com.muslim.simplenotesapp.utils.MyTopAppBar
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
@@ -57,9 +66,12 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(NavRoute.Add.route)
-            }) {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(NavRoute.Add.route)
+                },
+                modifier = Modifier.padding(bottom = 26.dp, end = 16.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "Add Icons",
@@ -81,6 +93,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
 
@@ -89,33 +102,49 @@ fun NoteItem(note: Note, navController: NavHostController) {
         TYPE_ROOM -> note.id
         else -> Constants.Keys.EMPTY
     }
+    val currentCreateDate = remember {
+        mutableStateOf(LocalDate.now())
+    }
+//    val simpleDateFormat = SimpleDateFormat("dd\MM\yyyy")
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 8.dp)
+            .padding(vertical = 6.dp, horizontal = 8.dp)
             .clickable {
                 navController.navigate(NavRoute.Note.route + "/${noteId}")
             },
         elevation = 6.dp,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(
-                text = note.title,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-            )
+            Column(
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = note.title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                )
 
+                Text(
+                    text = note.subtitle,
+                )
+            }
             Text(
-                text = note.subtitle,
+                text = currentCreateDate.value.format(DateTimeFormatter.ISO_DATE),
+                modifier = Modifier
+                    .padding(start = 10.dp, bottom = 10.dp),
+                textAlign = TextAlign.Start
             )
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {

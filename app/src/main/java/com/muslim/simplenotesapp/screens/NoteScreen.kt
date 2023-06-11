@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -135,7 +137,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
     ) {
         Scaffold(
             topBar = {
-                     MyTopAppBar(title = "Note")
+                MyTopAppBar(title = "Note")
             },
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +149,6 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     .padding(paddingValues)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
             ) {
                 Card(
                     modifier = Modifier
@@ -179,11 +180,11 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp),
+                        .padding(horizontal = 22.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Button(
+                    Button(modifier = Modifier.weight(0.5f),
                         onClick = {
                             scope.launch {
                                 title = note.title
@@ -194,7 +195,9 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         Text(text = Constants.Keys.UPDATE)
                     }
 
-                    Button(
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Button(modifier = Modifier.weight(0.5f),
                         onClick = {
                             viewModel.deleteNote(note = note) {
                                 navController.navigate(NavRoute.Main.route) {
@@ -206,19 +209,6 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         }) {
                         Text(text = Constants.Keys.DELETE)
                     }
-                }
-                Button(modifier = Modifier
-                    .padding(top = 16.dp)
-                    .padding(horizontal = 32.dp)
-                    .fillMaxWidth(),
-                    onClick = {
-                        navController.navigate(NavRoute.Main.route) {
-                            popUpTo(NavRoute.Main.route) {
-                                inclusive = true
-                            }
-                        }
-                    }) {
-                    Text(text = Constants.Keys.NAV_BACK)
                 }
             }
         }
