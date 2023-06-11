@@ -1,13 +1,17 @@
 package com.muslim.simplenotesapp.screens
 
 import android.app.Application
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -27,8 +31,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +48,7 @@ import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.DB_TYPE
+import com.muslim.simplenotesapp.utils.MyTopAppBar
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
@@ -51,13 +58,15 @@ import kotlinx.coroutines.launch
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
 
     val notes = viewModel.readAllNotes().observeAsState().value
-    val note = when(DB_TYPE.value) {
+    val note = when (DB_TYPE.value) {
         TYPE_ROOM -> {
-            notes?.firstOrNull{it.id == noteId?.toInt()} ?: Note()
+            notes?.firstOrNull { it.id == noteId?.toInt() } ?: Note()
         }
+
         TYPE_FIREBASE -> {
-            notes?.firstOrNull{it.firebaseId == noteId} ?: Note()
+            notes?.firstOrNull { it.firebaseId == noteId } ?: Note()
         }
+
         else -> Note()
     }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -74,25 +83,29 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(all = 32.dp)
+                        .padding(start = 32.dp, end = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = Constants.Keys.EDIT_NOTE,
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(top = 18.dp, bottom = 18.dp),
+                        textAlign = TextAlign.Center
                     )
                     OutlinedTextField(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text(text = Constants.Keys.TITLE) },
-                        isError = title.isEmpty()
+                        isError = title.isEmpty(),
+                        modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = subtitle,
                         onValueChange = { subtitle = it },
                         label = { Text(text = Constants.Keys.SUBTITLE) },
-                        isError = subtitle.isEmpty()
+                        isError = subtitle.isEmpty(),
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Button(
                         modifier = Modifier.padding(top = 16.dp),
@@ -105,9 +118,14 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                                     firebaseId = note.firebaseId
                                 )
                             ) {
-                                navController.navigate(NavRoute.Main.route)
+                                navController.navigate(NavRoute.Main.route) {
+                                    popUpTo(NavRoute.Main.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
-                        }
+                        },
+                        enabled = subtitle.isNotEmpty()
                     ) {
                         Text(text = Constants.Keys.UPDATE_NOTE)
                     }
@@ -115,34 +133,46 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
             }
         }
     ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+        Scaffold(
+            topBar = {
+                     MyTopAppBar(title = "Note")
+            },
+            modifier = Modifier
+                .fillMaxSize()
+        ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .background(Color(0xFFE2EEED))
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(28.dp)
+                        .height(500.dp)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 6.dp)
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.Start
                     ) {
                         Text(
                             text = note.title,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 32.dp)
+                            modifier = Modifier.padding(top = 6.dp),
+                            textAlign = TextAlign.Center
                         )
                         Text(
                             text = note.subtitle,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Light,
-                            modifier = Modifier.padding(top = 16.dp)
+                            modifier = Modifier.padding(top = 12.dp)
                         )
                     }
                 }
@@ -167,7 +197,11 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     Button(
                         onClick = {
                             viewModel.deleteNote(note = note) {
-                                navController.navigate(NavRoute.Main.route)
+                                navController.navigate(NavRoute.Main.route) {
+                                    popUpTo(NavRoute.Main.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }) {
                         Text(text = Constants.Keys.DELETE)
@@ -178,7 +212,11 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     .padding(horizontal = 32.dp)
                     .fillMaxWidth(),
                     onClick = {
-                        navController.navigate(NavRoute.Main.route)
+                        navController.navigate(NavRoute.Main.route) {
+                            popUpTo(NavRoute.Main.route) {
+                                inclusive = true
+                            }
+                        }
                     }) {
                     Text(text = Constants.Keys.NAV_BACK)
                 }

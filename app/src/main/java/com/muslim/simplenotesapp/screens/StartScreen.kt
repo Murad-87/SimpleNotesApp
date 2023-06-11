@@ -1,7 +1,6 @@
 package com.muslim.simplenotesapp.screens
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,10 +38,14 @@ import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.Constants.Keys.FIREBASE_DATABASE
+import com.muslim.simplenotesapp.utils.Constants.Keys.LOGIN_TEXT
+import com.muslim.simplenotesapp.utils.Constants.Keys.PASSWORD_TEXT
 import com.muslim.simplenotesapp.utils.Constants.Keys.ROOM_DATABASE
+import com.muslim.simplenotesapp.utils.Constants.Keys.SING_IN
 import com.muslim.simplenotesapp.utils.Constants.Keys.WHAT_WILL_WE_USE
 import com.muslim.simplenotesapp.utils.DB_TYPE
 import com.muslim.simplenotesapp.utils.LOGIN
+import com.muslim.simplenotesapp.utils.MyTopAppBar
 import com.muslim.simplenotesapp.utils.PASSWORD
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
@@ -77,13 +80,13 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     OutlinedTextField(
                         value = login,
                         onValueChange = { login = it },
-                        label = { Text(text = Constants.Keys.LOGIN_TEXT) },
+                        label = { Text(text = LOGIN_TEXT) },
                         isError = login.isEmpty()
                     )
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(text = Constants.Keys.PASSWORD_TEXT) },
+                        label = { Text(text = PASSWORD_TEXT) },
                         isError = password.isEmpty()
                     )
                     Button(
@@ -93,26 +96,34 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                             PASSWORD = password
                             viewModel.initDatabase(TYPE_FIREBASE) {
                                 DB_TYPE.value = TYPE_FIREBASE
-                                navController.navigate(NavRoute.Main.route)
+                                navController.navigate(NavRoute.Main.route) {
+                                    popUpTo(NavRoute.Main.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         },
                         enabled = login.isNotEmpty() && password.isNotEmpty()
                     ) {
-                        Text(text = Constants.Keys.SING_IN)
+                        Text(text = SING_IN)
                     }
                 }
             }
         }
     ) {
         Scaffold(
-            modifier = Modifier.fillMaxSize()
-        ) {
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                MyTopAppBar(title = "Notes App")
+            },
+        ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(bottom = 38.dp)
+                    .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Bottom
             ) {
                 Text(text = WHAT_WILL_WE_USE)
                 Button(
@@ -123,8 +134,8 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         }
                     },
                     modifier = Modifier
-                        .width(200.dp)
-                        .padding(vertical = 8.dp)
+                        .width(260.dp)
+                        .padding(vertical = 6.dp)
                 ) {
                     Text(text = ROOM_DATABASE)
                 }
@@ -136,8 +147,8 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         }
                     },
                     modifier = Modifier
-                        .width(200.dp)
-                        .padding(vertical = 8.dp)
+                        .width(260.dp)
+                        .padding(vertical = 6.dp)
                 ) {
                     Text(text = FIREBASE_DATABASE)
                 }

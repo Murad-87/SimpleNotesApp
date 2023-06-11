@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -30,6 +31,7 @@ import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
+import com.muslim.simplenotesapp.utils.MyTopAppBar
 
 @Composable
 fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -38,11 +40,16 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
     var subtitle by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false) }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            MyTopAppBar(title = "Add new note")
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(horizontal = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -60,7 +67,8 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                     isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                 },
                 label = { Text(text = Constants.Keys.NOTE_TITLE) },
-                isError = title.isEmpty()
+                isError = title.isEmpty(),
+                modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
@@ -70,7 +78,8 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                     isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                 },
                 label = { Text(text = Constants.Keys.NOTE_SUBTITLE) },
-                isError = title.isEmpty()
+                isError = title.isEmpty(),
+                modifier = Modifier.fillMaxWidth()
             )
 
             Button(
@@ -78,7 +87,11 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                 enabled = isButtonEnabled,
                 onClick = {
                     viewModel.addNote(note = Note(title = title, subtitle = subtitle)) {
-                        navController.navigate(NavRoute.Main.route)
+                        navController.navigate(NavRoute.Main.route) {
+                            popUpTo(NavRoute.Main.route) {
+                                inclusive = true
+                            }
+                        }
                     }
                 }) {
                 Text(text = Constants.Keys.ADD_NOTE)

@@ -1,8 +1,10 @@
 package com.muslim.simplenotesapp.screens
 
 import android.app.Application
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +37,7 @@ import com.muslim.simplenotesapp.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.DB_TYPE
+import com.muslim.simplenotesapp.utils.MyTopAppBar
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
 
@@ -43,6 +47,15 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
 
     Scaffold(
+        topBar = {
+            MyTopAppBar(
+                title = when (DB_TYPE.value) {
+                    TYPE_ROOM -> "Local storage"
+                    TYPE_FIREBASE -> "Remote storage"
+                    else -> "Notes App"
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(NavRoute.Add.route)
@@ -55,7 +68,12 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
             }
         }
     ) { paddingValue ->
-        LazyColumn(modifier = Modifier.padding(paddingValue)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValue)
+                .background(Color(0xFFE2EEED))
+        ) {
             items(notes) { note ->
                 NoteItem(note = note, navController = navController)
             }
@@ -66,7 +84,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
 
-    val noteId = when(DB_TYPE.value) {
+    val noteId = when (DB_TYPE.value) {
         TYPE_FIREBASE -> note.firebaseId
         TYPE_ROOM -> note.id
         else -> Constants.Keys.EMPTY
@@ -75,20 +93,20 @@ fun NoteItem(note: Note, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 24.dp)
+            .padding(vertical = 8.dp, horizontal = 8.dp)
             .clickable {
                 navController.navigate(NavRoute.Note.route + "/${noteId}")
             },
         elevation = 6.dp,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = note.title,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
             )
 
             Text(
