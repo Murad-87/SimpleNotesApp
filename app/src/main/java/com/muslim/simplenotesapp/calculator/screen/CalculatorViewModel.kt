@@ -1,9 +1,12 @@
-package com.muslim.simplenotesapp.calculator
+package com.muslim.simplenotesapp.calculator.screen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.muslim.simplenotesapp.calculator.data.CalculatorAction
+import com.muslim.simplenotesapp.calculator.data.CalculatorOperation
+import com.muslim.simplenotesapp.calculator.data.CalculatorState
 
 class CalculatorViewModel : ViewModel() {
 

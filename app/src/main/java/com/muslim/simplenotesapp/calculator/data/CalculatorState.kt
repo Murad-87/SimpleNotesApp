@@ -1,4 +1,4 @@
-package com.muslim.simplenotesapp.calculator
+package com.muslim.simplenotesapp.calculator.data
 
 data class CalculatorState(
     val number1: String = "",

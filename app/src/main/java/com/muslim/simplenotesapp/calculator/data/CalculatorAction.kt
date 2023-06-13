@@ -1,4 +1,4 @@
-package com.muslim.simplenotesapp.calculator
+package com.muslim.simplenotesapp.calculator.data
 
 sealed class CalculatorAction {
     data class Number(val number: Int) : CalculatorAction()
