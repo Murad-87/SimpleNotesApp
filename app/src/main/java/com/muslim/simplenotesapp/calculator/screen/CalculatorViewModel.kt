@@ -1,9 +1,12 @@
-package com.muslim.simplenotesapp.calculator
+package com.muslim.simplenotesapp.calculator.screen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.muslim.simplenotesapp.calculator.data.CalculatorAction
+import com.muslim.simplenotesapp.calculator.data.CalculatorOperation
+import com.muslim.simplenotesapp.calculator.data.CalculatorState
 
 class CalculatorViewModel : ViewModel() {
 
@@ -41,7 +44,7 @@ class CalculatorViewModel : ViewModel() {
         val number1 = state.number1.toIntOrNull()
         val number2 = state.number2.toIntOrNull()
         if (number1 != null && number2 != null) {
-            val result = when(state.operation) {
+            val result = when (state.operation) {
                 is CalculatorOperation.Add -> number1 + number2
                 is CalculatorOperation.Subtract -> number1 - number2
                 is CalculatorOperation.Multiply -> number1 * number2
@@ -71,7 +74,7 @@ class CalculatorViewModel : ViewModel() {
             )
             return
         }
-        if ( !state.number2.contains(".") && state.number2.isNotBlank()
+        if (!state.number2.contains(".") && state.number2.isNotBlank()
         ) {
             state = state.copy(
                 number1 = state.number2 + "."

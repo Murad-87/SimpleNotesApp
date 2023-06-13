@@ -1,4 +1,4 @@
-package com.muslim.simplenotesapp.calculator
+package com.muslim.simplenotesapp.calculator.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
