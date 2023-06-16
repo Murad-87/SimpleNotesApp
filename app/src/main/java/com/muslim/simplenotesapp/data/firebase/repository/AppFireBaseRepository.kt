@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.muslim.simplenotesapp.data.database_repository.DatabaseRepository
+import com.muslim.simplenotesapp.domain.DatabaseRepository
 import com.muslim.simplenotesapp.data.firebase.AllNotesLiveData
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.utils.Constants

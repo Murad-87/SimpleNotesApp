@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.muslim.simplenotesapp.data.database.room.AppRoomDatabase
-import com.muslim.simplenotesapp.data.database.room.repository.RoomRepository
+import com.muslim.simplenotesapp.data.database_room.room.AppRoomDatabase
+import com.muslim.simplenotesapp.data.database_room.room.repository.RoomRepository
 import com.muslim.simplenotesapp.data.firebase.repository.AppFireBaseRepository
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.utils.Constants

@@ -1,9 +1,8 @@
 package com.muslim.simplenotesapp.utils
 
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -30,6 +29,7 @@ fun MyTopAppBar(
     endIconAction: (() -> Unit)? = null,
     backgroundColor: Color = Color(0xFF2196F3),
     endIconColorTint: Color = Color.Black,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
 
     TopAppBar(
@@ -67,6 +67,7 @@ fun MyTopAppBar(
         },
         backgroundColor = backgroundColor,
         contentColor = Color.White,
-        elevation = elevation
+        elevation = elevation,
+        actions = actions
     )
 }
