@@ -1,7 +1,7 @@
 package com.muslim.simplenotesapp.utils
 
 import androidx.compose.runtime.mutableStateOf
-import com.muslim.simplenotesapp.data.database_repository.DatabaseRepository
+import com.muslim.simplenotesapp.domain.DatabaseRepository
 
 const val TYPE_DATABASE = "type_database"
 const val TYPE_ROOM = "type_room"
@@ -18,7 +18,6 @@ object Constants {
     object Keys {
         const val NOTES_DATABASE = "notes_database"
         const val NOTES_TABLE = "notes_table"
-        const val ADD_NEW_NOTE = "Add new note"
         const val NOTE_TITLE = "Title"
         const val NOTE_SUBTITLE = "Write a note"
         const val ADD_NOTE = "Add note"
@@ -28,9 +27,8 @@ object Constants {
         const val ROOM_DATABASE = "Local storage"
         const val FIREBASE_DATABASE = "Remote storage"
         const val ID = "id"
-        const val UPDATE = "UPDATE"
-        const val DELETE = "DELETE"
-        const val NAV_BACK = "BACK"
+        const val UPDATE = "Update"
+        const val DELETE = "Delete"
         const val EDIT_NOTE = "Edit note"
         const val EMPTY = ""
         const val UPDATE_NOTE = "Update note"
@@ -46,6 +44,7 @@ object Constants {
         const val MAIN_SCREEN = "main_screen"
         const val ADD_SCREEN = "add_screen"
         const val NOTE_SCREEN = "note_screen"
+        const val CALCULATOR_SCREEN = "calculator_screen"
 
     }
 }

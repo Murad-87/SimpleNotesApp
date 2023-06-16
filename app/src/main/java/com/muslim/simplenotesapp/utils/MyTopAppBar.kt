@@ -1,11 +1,14 @@
 package com.muslim.simplenotesapp.utils
 
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +25,11 @@ fun MyTopAppBar(
     elevation: Dp = 0.dp,
     navController: NavController? = null,
     endIcon: Painter? = null,
-    shouldShowStartIcon: Boolean = true,
+    shouldShowStartIcon: Boolean = false,
     endIconAction: (() -> Unit)? = null,
     backgroundColor: Color = Color(0xFF2196F3),
+    endIconColorTint: Color = Color.Black,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
 
     TopAppBar(
@@ -33,6 +38,26 @@ fun MyTopAppBar(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
+                if (shouldShowStartIcon) {
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier.align(Alignment.CenterStart)
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                }
+                if (endIcon != null) {
+                    IconButton(
+                        onClick = { endIconAction?.invoke() },
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    ) {
+                        Icon(
+                            painter = endIcon,
+                            contentDescription = null,
+                            tint = endIconColorTint
+                        )
+                    }
+                }
                 Text(
                     text = title,
                     modifier = Modifier.align(Alignment.CenterStart),
@@ -42,6 +67,7 @@ fun MyTopAppBar(
         },
         backgroundColor = backgroundColor,
         contentColor = Color.White,
-        elevation = elevation
+        elevation = elevation,
+        actions = actions
     )
 }
