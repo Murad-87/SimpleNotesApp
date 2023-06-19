@@ -1,6 +1,6 @@
 package com.muslim.simplenotesapp.presentation.screens_note
 
-import android.app.Application
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,18 +39,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.muslim.simplenotesapp.MainViewModel
-import com.muslim.simplenotesapp.MainViewModelFactory
 import com.muslim.simplenotesapp.R
 import com.muslim.simplenotesapp.presentation.navigation.NavRoute
 import com.muslim.simplenotesapp.ui.theme.MyColor
-import com.muslim.simplenotesapp.ui.theme.SimpleNotesAppTheme
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.Constants.Keys.FIREBASE_DATABASE
 import com.muslim.simplenotesapp.utils.Constants.Keys.LOGIN_TEXT
@@ -99,7 +93,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         value = login,
                         onValueChange = { login = it },
                         label = { Text(text = LOGIN_TEXT) },
-                        placeholder = { Text(text = "@email") },
+                        placeholder = { Text(text = "@mail") },
                         isError = login.isEmpty(),
                         visualTransformation = VisualTransformation.None,
                         keyboardOptions = KeyboardOptions(
@@ -118,7 +112,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         value = password,
                         onValueChange = { password = it },
                         label = { Text(text = PASSWORD_TEXT) },
-                        placeholder = { Text(text = "password")},
+                        placeholder = { Text(text = "password") },
                         isError = password.isEmpty(),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
@@ -157,7 +151,8 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     ) {
                         Text(
                             text = SING_IN,
-                            fontSize = 18.sp
+                            fontSize = 18.sp,
+                            color = Color.White
                         )
                     }
                 }
@@ -173,6 +168,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color(0xFFE2EEED))
                     .padding(bottom = 38.dp)
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -223,13 +219,13 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun StartScreenPreview() {
-    SimpleNotesAppTheme {
-        val context = LocalContext.current
-        val viewModel: MainViewModel =
-            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-        StartScreen(navController = rememberNavController(), viewModel = viewModel)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun StartScreenPreview() {
+//    SimpleNotesAppTheme {
+//        val context = LocalContext.current
+//        val viewModel: MainViewModel =
+//            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+//        StartScreen(navController = rememberNavController(), viewModel = viewModel)
+//    }
+//}

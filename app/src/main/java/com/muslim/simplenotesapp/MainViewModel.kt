@@ -3,11 +3,9 @@ package com.muslim.simplenotesapp
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.muslim.simplenotesapp.data.database_room.room.AppRoomDatabase
-import com.muslim.simplenotesapp.data.database_room.room.repository.RoomRepository
+import com.muslim.simplenotesapp.data.database_room.room.dao.NoteRoomDao
+import com.muslim.simplenotesapp.data.database_room.room.repository.RoomRepositoryImpl
 import com.muslim.simplenotesapp.data.firebase.repository.AppFireBaseRepository
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.utils.Constants
@@ -15,10 +13,18 @@ import com.muslim.simplenotesapp.utils.DB_TYPE
 import com.muslim.simplenotesapp.utils.REPOSITORY
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    application: Application,
+    private val noteRoomDao: NoteRoomDao,
+    private val appFireBaseRepository: AppFireBaseRepository,
+    private val roomRepositoryImpl: RoomRepositoryImpl
+) : AndroidViewModel(application) {
 
     val context = application
 
@@ -26,13 +32,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.d("checkData", "MainViewModel initDatabase with $type")
         when (type) {
             TYPE_ROOM -> {
-                val dao = AppRoomDatabase.getInstance(context).getRoomDao()
-                REPOSITORY = RoomRepository(dao)
+                noteRoomDao
+                REPOSITORY = roomRepositoryImpl
                 onSuccess()
             }
 
             TYPE_FIREBASE -> {
-                REPOSITORY = AppFireBaseRepository()
+                REPOSITORY = appFireBaseRepository
                 REPOSITORY.connectToDatabase(
                     { onSuccess() },
                     { Log.d("checkData", "Error $it") }
@@ -82,16 +88,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onSuccess()
             }
 
-            else -> {Log.d("checkData", "signOut: ELSE: ${DB_TYPE.value}")}
+            else -> {
+                Log.d("checkData", "signOut: ELSE: ${DB_TYPE.value}")
+            }
         }
-    }
-}
-
-class MainViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(application = application) as T
-        }
-        throw IllegalArgumentException("Unknown viewModel class")
     }
 }

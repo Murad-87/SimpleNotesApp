@@ -117,13 +117,14 @@ fun CalculatorScreen(
                         Toast.makeText(context, "Число задано!", Toast.LENGTH_LONG).show()
                     }
                 },
+                endIconEnabled = true,
                 actions = {
                     MyDropdownMenu(showMenu = showMenu,
                         onClick = {
                             dialogState.value = true
                             showMenu.value = false
-                        }) {
-                    }
+                        },
+                    textItem = "Придумать число")
                 }
             )
         }

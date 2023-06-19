@@ -2,20 +2,30 @@ package com.muslim.simplenotesapp.data.firebase.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.muslim.simplenotesapp.domain.DatabaseRepository
 import com.muslim.simplenotesapp.data.firebase.AllNotesLiveData
 import com.muslim.simplenotesapp.data.model.Note
+import com.muslim.simplenotesapp.domain.AuthRepositoryFirebase
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.FIREBASE_ID
 import com.muslim.simplenotesapp.utils.LOGIN
 import com.muslim.simplenotesapp.utils.PASSWORD
+import com.muslim.simplenotesapp.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AppFireBaseRepository : DatabaseRepository {
+class AppFireBaseRepository @Inject constructor(
+    private val firebaseAuth : FirebaseAuth
+) : DatabaseRepository,  AuthRepositoryFirebase{
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+
     private val database = Firebase.database.reference
         .child(firebaseAuth.currentUser?.uid.toString())
 
@@ -67,5 +77,25 @@ class AppFireBaseRepository : DatabaseRepository {
                     .addOnSuccessListener { onSuccess() }
                     .addOnFailureListener { onFail(it.message.toString()) }
             }
+    }
+
+    override fun loginUser(email: String, password: String): Flow<Resource<AuthResult>> {
+        return flow {
+            emit(Resource.Loading())
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            emit(Resource.Success(result))
+        }.catch {
+            emit(Resource.Error(it.message.toString()))
+        }
+    }
+
+    override fun registerUser(email: String, password: String): Flow<Resource<AuthResult>> {
+        return flow {
+            emit(Resource.Loading())
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            emit(Resource.Success(result))
+        }.catch {
+            emit(Resource.Error(it.message.toString()))
+        }
     }
 }

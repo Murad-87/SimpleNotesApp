@@ -10,7 +10,7 @@ import androidx.compose.runtime.MutableState
 fun MyDropdownMenu(
     showMenu: MutableState<Boolean>,
     onClick: () -> Unit,
-    onCancel: () -> Unit
+    textItem: String,
 ) {
 
     DropdownMenu(
@@ -20,7 +20,7 @@ fun MyDropdownMenu(
         DropdownMenuItem(onClick = {
             onClick()
         }) {
-            Text(text = "Придумать число")
+            Text(text = textItem)
         }
     }
 }
