@@ -29,7 +29,8 @@ fun MyTopAppBar(
     endIconAction: (() -> Unit)? = null,
     backgroundColor: Color = Color(0xFF2196F3),
     endIconColorTint: Color = Color.Black,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    endIconEnabled: Boolean = false
 ) {
 
     TopAppBar(
@@ -49,12 +50,14 @@ fun MyTopAppBar(
                 if (endIcon != null) {
                     IconButton(
                         onClick = { endIconAction?.invoke() },
-                        modifier = Modifier.align(Alignment.CenterEnd)
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        enabled = endIconEnabled
                     ) {
                         Icon(
                             painter = endIcon,
                             contentDescription = null,
-                            tint = endIconColorTint
+                            tint = endIconColorTint,
+
                         )
                     }
                 }
@@ -68,6 +71,7 @@ fun MyTopAppBar(
         backgroundColor = backgroundColor,
         contentColor = Color.White,
         elevation = elevation,
-        actions = actions
+        actions = actions,
+
     )
 }

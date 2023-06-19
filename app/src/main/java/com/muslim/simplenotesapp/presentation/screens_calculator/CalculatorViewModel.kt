@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.muslim.simplenotesapp.data.data_calculator.CalculatorAction
 import com.muslim.simplenotesapp.data.data_calculator.CalculatorOperation
 import com.muslim.simplenotesapp.data.data_calculator.CalculatorState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CalculatorViewModel() : ViewModel() {
+@HiltViewModel
+class CalculatorViewModel @Inject constructor() : ViewModel() {
 
 
     var state by mutableStateOf(CalculatorState())

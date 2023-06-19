@@ -2,10 +2,14 @@ package com.muslim.simplenotesapp.data.database_room.room.repository
 
 import androidx.lifecycle.LiveData
 import com.muslim.simplenotesapp.data.database_room.room.dao.NoteRoomDao
-import com.muslim.simplenotesapp.domain.DatabaseRepository
 import com.muslim.simplenotesapp.data.model.Note
+import com.muslim.simplenotesapp.domain.DatabaseRepository
+import javax.inject.Inject
 
-class RoomRepository(private val noteRoomDao: NoteRoomDao): DatabaseRepository {
+class RoomRepositoryImpl @Inject constructor(
+    private val noteRoomDao: NoteRoomDao
+) : DatabaseRepository {
+
     override val readAll: LiveData<List<Note>>
         get() = noteRoomDao.getAllNotes()
 
