@@ -65,6 +65,10 @@ class AppFireBaseRepository @Inject constructor(
             .addOnFailureListener { Log.d("checkData", "Failed to add new note") }
     }
 
+    override suspend fun deleteAllNotes() {
+        database.removeValue()
+    }
+
     override fun singOut() {
         firebaseAuth.signOut()
     }

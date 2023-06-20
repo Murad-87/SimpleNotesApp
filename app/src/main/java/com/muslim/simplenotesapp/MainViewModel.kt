@@ -79,6 +79,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllNotes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.deleteAllNotes()
+        }
+    }
+
     fun signOut(onSuccess: () -> Unit) {
         when (DB_TYPE.value) {
             TYPE_FIREBASE,

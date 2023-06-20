@@ -1,9 +1,11 @@
 package com.muslim.simplenotesapp.presentation.screens_note
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -12,12 +14,16 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +45,7 @@ import com.muslim.simplenotesapp.MainViewModel
 import com.muslim.simplenotesapp.R
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.presentation.navigation.NavRoute
+import com.muslim.simplenotesapp.ui.theme.LightGray
 import com.muslim.simplenotesapp.ui.theme.MyColor
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.DB_TYPE
@@ -154,6 +161,12 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                                 }
                                 showMenu.value = false
                             }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Edit,
+                                    contentDescription = null,
+                                    tint = LightGray
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
                                 Text(text = "Изменить")
                             }
                             DropdownMenuItem(onClick = {
@@ -166,6 +179,12 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                                 }
                                 showMenu.value = false
                             }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = null,
+                                    tint = LightGray
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
                                 Text(text = "Удалить")
                             }
                         }
