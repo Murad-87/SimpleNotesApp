@@ -28,5 +28,9 @@ class RoomRepositoryImpl @Inject constructor(
         onSuccess()
     }
 
+    override suspend fun deleteAllNotes() {
+        noteRoomDao.deleteAllNotes()
+    }
+
     override fun singOut() {}
 }

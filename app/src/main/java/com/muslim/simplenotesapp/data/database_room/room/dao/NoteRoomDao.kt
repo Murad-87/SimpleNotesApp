@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.muslim.simplenotesapp.data.model.Note
+import com.muslim.simplenotesapp.utils.Constants
 
 @Dao
 interface NoteRoomDao {
@@ -22,4 +23,7 @@ interface NoteRoomDao {
 
     @Delete
     suspend fun deleteNote(note: Note)
+
+    @Query("DELETE FROM ${Constants.Keys.NOTES_TABLE}")
+    suspend fun deleteAllNotes()
 }

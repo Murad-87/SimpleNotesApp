@@ -28,25 +28,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.muslim.simplenotesapp.MainViewModel
+import com.muslim.simplenotesapp.R
 import com.muslim.simplenotesapp.data.model.Note
 import com.muslim.simplenotesapp.presentation.navigation.NavRoute
+import com.muslim.simplenotesapp.ui.theme.LightGray
 import com.muslim.simplenotesapp.ui.theme.MediumGray
 import com.muslim.simplenotesapp.ui.theme.MyColor
 import com.muslim.simplenotesapp.utils.Constants
 import com.muslim.simplenotesapp.utils.DB_TYPE
+import com.muslim.simplenotesapp.utils.MyDropdownMenu
 import com.muslim.simplenotesapp.utils.MyTopAppBar
 import com.muslim.simplenotesapp.utils.TYPE_FIREBASE
 import com.muslim.simplenotesapp.utils.TYPE_ROOM
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -54,6 +55,9 @@ import java.util.Locale
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
+    val showMenu = remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         topBar = {
@@ -62,6 +66,22 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                     TYPE_ROOM -> "Локальное хранилище"
                     TYPE_FIREBASE -> "Удаленное хранилище"
                     else -> "Notes App"
+                },
+                endIcon = painterResource(id = R.drawable.ic_more_vert),
+                endIconColorTint = Color.White,
+                endIconEnabled = true,
+                endIconAction = { showMenu.value = true },
+                actions = {
+                    MyDropdownMenu(
+                        showMenu = showMenu,
+                        onClick = {
+                            viewModel.deleteAllNotes()
+                            showMenu.value = false
+                        },
+                        icon = painterResource(id = R.drawable.ic_delete_all),
+                        textItem = "Удалить все",
+                        iconColorTint = LightGray
+                    )
                 }
             )
         },
