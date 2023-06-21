@@ -6,11 +6,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
@@ -101,7 +107,9 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
             }
         }
     ) { paddingValue ->
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(count = 2),
+            contentPadding = PaddingValues(2.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValue)
@@ -129,7 +137,7 @@ fun NoteItem(note: Note, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 12.dp)
+            .padding(vertical = 4.dp, horizontal = 6.dp)
             .clickable {
                 navController.navigate(NavRoute.Note.route + "/${noteId}")
             },
@@ -151,6 +159,8 @@ fun NoteItem(note: Note, navController: NavHostController) {
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
+
+                Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
                     text = note.subtitle,

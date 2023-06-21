@@ -20,6 +20,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.rememberModalBottomSheetState
@@ -92,9 +93,8 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     OutlinedTextField(
                         value = login,
                         onValueChange = { login = it },
-                        label = { Text(text = LOGIN_TEXT) },
-                        placeholder = { Text(text = "@mail") },
-                        isError = login.isEmpty(),
+                        label = { Text(text = LOGIN_TEXT, color = Color.Black) },
+                        placeholder = { Text(text = "Email") },
                         visualTransformation = VisualTransformation.None,
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
@@ -106,14 +106,18 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         leadingIcon = {
                             Icon(imageVector = Icons.Filled.Email, contentDescription = null)
-                        }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MyColor,
+                            disabledBorderColor = MyColor,
+                            cursorColor = MyColor
+                        )
                     )
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(text = PASSWORD_TEXT) },
+                        label = { Text(text = PASSWORD_TEXT, color = Color.Black) },
                         placeholder = { Text(text = "password") },
-                        isError = password.isEmpty(),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
@@ -128,7 +132,12 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                                 painter = painterResource(id = R.drawable.ic_vpn_key),
                                 contentDescription = null
                             )
-                        }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MyColor,
+                            disabledBorderColor = MyColor,
+                            cursorColor = MyColor
+                        )
                     )
                     Button(
                         modifier = Modifier

@@ -11,9 +11,9 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo
-    val title: String = "",
+    var title: String = "",
     @ColumnInfo
-    val subtitle: String = "",
+    var subtitle: String = "",
     val createdDate: Date = Date(),
     val firebaseId: String = ""
 )
