@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.muslim.simplenotesapp.data.database_room.room.dao.NoteRoomDao
 import com.muslim.simplenotesapp.data.model.Note
 
-@Database(entities = [Note::class], version = 5)
+@Database(entities = [Note::class], version = 6)
 @TypeConverters(DateConverter::class)
 abstract class AppRoomDatabase : RoomDatabase() {
 

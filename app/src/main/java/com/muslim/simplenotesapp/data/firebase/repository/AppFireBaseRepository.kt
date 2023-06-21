@@ -38,6 +38,7 @@ class AppFireBaseRepository @Inject constructor(
         mapNotes[FIREBASE_ID] = noteId
         mapNotes[Constants.Keys.TITLE] = note.title
         mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
+        mapNotes["createdDate"] = note.createdDate
 
         database.child(noteId)
             .updateChildren(mapNotes)
